@@ -1,0 +1,340 @@
+-- 
+-- 	component:   CIMI Archetype Project
+-- 	description: CIMI Reference Model formal expression. This file is a DADL serialisation of
+--               the BMM object meta-model classes found at 
+--               http://www.openehr.org/svn/ref_impl_eiffel/BRANCHES/specialisation/libraries/common_libs/src/basic_meta_model
+-- 	keywords:    reference model, meta-model, archetypes
+-- 	author:      Thomas Beale
+-- 	support:     xxxx
+-- 	copyright:   Copyright (c) 2012 openEHR Foundation
+-- 	license:     See end of file
+-- 
+-- 	file:        $URL: http://www.openehr.org/svn/knowledge2/TRUNK/rm_schemas/cimi_structures_050.bmm $
+-- 	revision:    $LastChangedRevision: 82 $
+-- 	last_change: $LastChangedDate: 2012-06-18 18:15:43 +0930 (Mon, 18 Jun 2012) $
+-- 
+
+------------------------------------------------------
+-- BMM version on which these schemas are based.
+-- Current BMM version can be found as value of 'Bmm_internal_version' in 
+--     http://www.openehr.org/svn/ref_impl_eiffel/BRANCHES/adl1.5/libraries/common_libs/src/basic_meta_model/bmm_definitions.e
+--
+------------------------------------------------------
+bmm_version = <"2.0">
+
+------------------------------------------------------
+-- schema identification
+-- (schema_id computed as <rm_publisher>_<schema_name>_<rm_release>)
+------------------------------------------------------
+rm_publisher = <"cimi">
+schema_name = <"structures">
+rm_release = <"0.5.0">
+
+------------------------------------------------------
+-- schema documentation
+------------------------------------------------------
+schema_revision = <"$LastChangedRevision: 82 $">
+schema_lifecycle_state = <"experimental">
+schema_description = <"CIMI Release 0.5 structures schema">
+
+------------------------------------------------------
+-- inclusions
+------------------------------------------------------
+includes = <
+	["1"] = <
+		id = <"openehr_basic_types_1.0.2">
+	>
+>
+
+------------------------------------------------------
+-- archetyping
+------------------------------------------------------
+archetype_parent_class = <"LOCATABLE">
+
+------------------------------------------------------
+-- packages
+------------------------------------------------------
+
+packages = <
+		["org.cimi.rm.data_structures"] = <
+			name = <"org.cimi.rm.data_structures">
+			classes = <"ITEM", "CLUSTER", "ELEMENT"> 
+		>
+	["org.cimi.rm.common"] = <
+		name = <"org.cimi.rm.common">
+		packages = <
+			["generic"] = <
+				name = <"generic">
+				classes = <"PARTICIPATION", "PARTY_PROXY", "PARTY_SELF", "PARTY_IDENTIFIED", "PARTY_RELATED"> 
+			>
+			["archetyped"] = <
+				name = <"archetyped">
+				classes = <"PATHABLE", "LOCATABLE", "LINK", "ARCHETYPED"> 
+			>
+		>
+	>
+>
+
+
+------------------------------------------------------
+-- classes
+------------------------------------------------------
+
+class_definitions = <
+
+	------------------------------------------------------------
+	------------- rm.data_structures.item_structure ------------
+	------------------------------------------------------------
+
+	["ITEM"] = <
+		name = <"ITEM">
+		ancestors = <"LOCATABLE", ...>
+		is_abstract = <True>
+		properties = <
+			["null_flavour"] = (P_BMM_SINGLE_PROPERTY) <
+				name = <"null_flavour">
+				type = <"DV_CODED_TEXT">
+			>
+			["value"] = (P_BMM_SINGLE_PROPERTY) <
+				name = <"value">
+				type = <"DATA_VALUE">
+			>
+		>
+	>
+
+	["CLUSTER"] = <
+		name = <"CLUSTER">
+		ancestors = <"ITEM", ...>
+		properties = <
+			["items"] = (P_BMM_CONTAINER_PROPERTY) <
+				name = <"items">
+				type_def = <
+					container_type = <"List">
+					type = <"ITEM">
+				>
+				cardinality = <|>=1|>
+				is_mandatory = <True>
+			>
+		>
+	>
+
+	["ELEMENT"] = <
+		name = <"ELEMENT">
+		ancestors = <"ITEM", ...>
+	>
+
+	------------------------------------------------------------
+	---------------------- rm.common.generic -------------------
+	------------------------------------------------------------
+
+	["PARTICIPATION"] = <
+		name = <"PARTICIPATION">
+		ancestors = <"Any", ...>
+		properties = <
+			["function"] = (P_BMM_SINGLE_PROPERTY) <
+				name = <"function">
+				type = <"DV_TEXT">
+				is_mandatory = <True>
+			>
+			["time"] = (P_BMM_GENERIC_PROPERTY) <
+				name = <"time">
+				type_def = <
+					root_type = <"DV_INTERVAL">
+					generic_parameters = <"DV_DATE_TIME">
+				>
+				is_im_runtime = <True>
+			>
+			["mode"] = (P_BMM_SINGLE_PROPERTY) <
+				name = <"mode">
+				type = <"DV_CODED_TEXT">
+				is_mandatory = <True>
+			>
+			["performer"] = (P_BMM_SINGLE_PROPERTY) <
+				name = <"performer">
+				type = <"PARTY_PROXY">
+				is_mandatory = <True>
+			>
+		>
+	>
+
+	["PARTY_PROXY"] = <
+		name = <"PARTY_PROXY">
+		is_abstract = <True>
+		ancestors = <"Any", ...>
+		properties = <
+			["external_ref"] = (P_BMM_SINGLE_PROPERTY) <
+				name = <"external_ref">
+				type = <"PARTY_REF">
+			>
+		>
+	>
+
+	["PARTY_IDENTIFIED"] = <
+		name = <"PARTY_IDENTIFIED">
+		ancestors = <"PARTY_PROXY", ...>
+		properties = <
+			["name"] = (P_BMM_SINGLE_PROPERTY) <
+				name = <"name">
+				type = <"String">
+			>
+			["identifiers"] = (P_BMM_CONTAINER_PROPERTY) <
+				name = <"identifiers">
+				type_def = <
+					container_type = <"List">
+					type = <"DV_IDENTIFIER">
+				>
+				cardinality = <|>=0|>
+				is_im_runtime = <True>
+			>
+		>
+	>
+
+	["PARTY_RELATED"] = <
+		name = <"PARTY_RELATED">
+		ancestors = <"PARTY_IDENTIFIED", ...>
+		properties = <
+			["relationship"] = (P_BMM_SINGLE_PROPERTY) <
+				name = <"relationship">
+				type = <"DV_CODED_TEXT">
+				is_mandatory = <True>
+			>
+		>
+	>
+
+	["PARTY_SELF"] = <
+		name = <"PARTY_SELF">
+		ancestors = <"PARTY_PROXY", ...>
+	>
+
+	------------------------------------------------------------
+	--------------------- rm.common.archetyped -----------------
+	------------------------------------------------------------
+
+	["PATHABLE"] = <
+		name = <"PATHABLE">
+		is_abstract = <True>
+		ancestors = <"Any", ...>
+	>
+
+	["LOCATABLE"] = <
+		name = <"LOCATABLE">
+		is_abstract = <True>
+		ancestors = <"PATHABLE", ...>
+		properties = <
+			["uid"] = (P_BMM_SINGLE_PROPERTY) <
+				name = <"uid">
+				type = <"UID_BASED_ID">
+				is_im_infrastructure = <True>
+			>
+			["archetype_node_id"] = (P_BMM_SINGLE_PROPERTY) <
+				name = <"archetype_node_id">
+				type = <"String">
+				is_mandatory = <True>
+				is_im_infrastructure = <True>
+			>
+			["name"] = (P_BMM_SINGLE_PROPERTY) <
+				name = <"name">
+				type = <"DV_TEXT">
+				is_mandatory = <True>
+			>
+			["archetype_details"] = (P_BMM_SINGLE_PROPERTY) <
+				name = <"archetype_details">
+				type = <"ARCHETYPED">
+				is_im_infrastructure = <True>
+			>
+			["links"] = (P_BMM_CONTAINER_PROPERTY) <
+				name = <"links">
+				type_def = <
+					container_type = <"List">
+					type = <"LINK">
+				>
+				cardinality = <|>=0|>
+			>
+		>
+	>
+
+	["LINK"] = <
+		name = <"LINK">
+		ancestors = <"Any", ...>
+		properties = <
+			["meaning"] = (P_BMM_SINGLE_PROPERTY) <
+				name = <"meaning">
+				type = <"DV_TEXT">
+				is_mandatory = <True>
+			>
+			["type"] = (P_BMM_SINGLE_PROPERTY) <
+				name = <"type">
+				type = <"DV_TEXT">
+				is_mandatory = <True>
+			>
+			["target"] = (P_BMM_SINGLE_PROPERTY) <
+				name = <"target">
+				type = <"DV_EHR_URI">
+				is_mandatory = <True>
+			>
+		>
+	>
+
+	["ARCHETYPED"] = <
+		name = <"ARCHETYPED">
+		ancestors = <"Any", ...>
+		properties = <
+			["archetype_id"] = (P_BMM_SINGLE_PROPERTY) <
+				name = <"archetype_id">
+				type = <"ARCHETYPE_ID">
+				is_mandatory = <True>
+				is_im_infrastructure = <True>
+			>
+			["template_id"] = (P_BMM_SINGLE_PROPERTY) <
+				name = <"template_id">
+				type = <"TEMPLATE_ID">
+				is_im_infrastructure = <True>
+			>
+			["rm_version"] = (P_BMM_SINGLE_PROPERTY) <
+				name = <"rm_version">
+				type = <"String">
+				is_mandatory = <True>
+				is_im_infrastructure = <True>
+			>
+		>
+	>
+
+>
+
+--|
+--| ***** BEGIN LICENSE BLOCK *****
+--| Version: MPL 1.1/GPL 2.0/LGPL 2.1
+--|
+--| The contents of this file are subject to the Mozilla Public License Version
+--| 1.1 (the 'License'); you may not use this file except in compliance with
+--| the License. You may obtain a copy of the License at
+--| http://www.mozilla.org/MPL/
+--|
+--| Software distributed under the License is distributed on an 'AS IS' basis,
+--| WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+--| for the specific language governing rights and limitations under the
+--| License.
+--|
+--| The Original Code is openehr_structures_102.dadl
+--|
+--| The Initial Developer of the Original Code is Thomas Beale.
+--| Portions created by the Initial Developer are Copyright (C) 2010
+--| the Initial Developer. All Rights Reserved.
+--|
+--| Contributor(s):
+--|
+--| Alternatively, the contents of this file may be used under the terms of
+--| either the GNU General Public License Version 2 or later (the 'GPL'), or
+--| the GNU Lesser General Public License Version 2.1 or later (the 'LGPL'),
+--| in which case the provisions of the GPL or the LGPL are applicable instead
+--| of those above. If you wish to allow use of your version of this file only
+--| under the terms of either the GPL or the LGPL, and not to allow others to
+--| use your version of this file under the terms of the MPL, indicate your
+--| decision by deleting the provisions above and replace them with the notice
+--| and other provisions required by the GPL or the LGPL. If you do not delete
+--| the provisions above, a recipient may use your version of this file under
+--| the terms of any one of the MPL, the GPL or the LGPL.
+--|
+--| ***** END LICENSE BLOCK *****
+--|
+

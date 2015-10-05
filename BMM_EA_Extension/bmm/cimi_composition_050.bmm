@@ -1,0 +1,269 @@
+-- 
+-- 	component:   CIMI Archetype Project
+-- 	description: openEHR Reference Model ehr package formal expression. This file is a DADL serialisation of
+--               the BMM object meta-model classes found at 
+--               http://www.openehr.org/svn/ref_impl_eiffel/BRANCHES/specialisation/libraries/common_libs/src/basic_meta_model
+-- 	keywords:    reference model, meta-model, archetypes
+-- 	author:      Thomas Beale
+-- 	support:     xxx
+-- 	copyright:   Copyright (c) 2012 openEHR Foundation
+-- 	license:     See end of file
+-- 
+-- 	file:        $URL: http://www.openehr.org/svn/knowledge2/TRUNK/rm_schemas/cimi_composition_050.bmm $
+-- 	revision:    $LastChangedRevision: 82 $
+-- 	last_change: $LastChangedDate: 2012-06-18 18:15:43 +0930 (Mon, 18 Jun 2012) $
+-- 
+
+------------------------------------------------------
+-- BMM version on which these schemas are based.
+-- Current BMM version can be found as value of 'Bmm_internal_version' in 
+--     http://www.openehr.org/svn/ref_impl_eiffel/BRANCHES/adl1.5/libraries/common_libs/src/basic_meta_model/bmm_definitions.e
+--
+------------------------------------------------------
+bmm_version = <"2.0">
+
+------------------------------------------------------
+-- schema identification
+-- (schema_id computed as <rm_publisher>_<schema_name>_<rm_release>)
+------------------------------------------------------
+rm_publisher = <"cimi">
+schema_name = <"composition">
+rm_release = <"0.5.0">
+
+------------------------------------------------------
+-- schema documentation
+------------------------------------------------------
+schema_revision = <"$LastChangedRevision: 82 $">
+schema_lifecycle_state = <"experimental">
+schema_description = <"CIMI Release 0.5.0 COMPOSITION schema">
+
+------------------------------------------------------
+-- inclusions
+------------------------------------------------------
+includes = <
+	["1"] = <
+		id = <"cimi_structures_0.5.0">
+	>
+>
+
+
+------------------------------------------------------
+-- archetyping
+------------------------------------------------------
+archetype_rm_closure_packages = <"org.cimi.rm.composition", ...>
+
+
+------------------------------------------------------
+-- packages - software structure
+------------------------------------------------------
+
+packages = <
+	["org.cimi.rm.composition"] = <
+		name = <"org.cimi.rm.composition">
+		classes = <"COMPOSITION", "EVENT_CONTEXT"> 
+		packages = <
+			["content"] = <
+				name = <"content">
+				classes = <"CONTENT_ITEM", "SECTION", "ENTRY">
+			>
+		>
+	>
+>
+
+------------------------------------------------------
+-- classes
+------------------------------------------------------
+
+class_definitions = <
+
+	--
+	--------------------- rm.composition ------------------
+	--
+
+	["COMPOSITION"] = <
+		name = <"COMPOSITION">
+		ancestors = <"LOCATABLE", ...>
+		properties = <
+			["language"] = (P_BMM_SINGLE_PROPERTY) <
+				name = <"language">
+				type = <"CODE_PHRASE">
+				is_mandatory = <True>
+				is_im_infrastructure = <True>
+			>
+			["territory"] = (P_BMM_SINGLE_PROPERTY) <
+				name = <"territory">
+				type = <"CODE_PHRASE">
+				is_mandatory = <True>
+				is_im_infrastructure = <True>
+			>
+			["category"] = (P_BMM_SINGLE_PROPERTY) <
+				name = <"category">
+				type = <"DV_CODED_TEXT">
+				is_mandatory = <True>
+			>
+			["composer"] = (P_BMM_SINGLE_PROPERTY) <
+				name = <"composer">
+				type = <"PARTY_PROXY">
+				is_mandatory = <True>
+			>
+			["context"] = (P_BMM_SINGLE_PROPERTY) <
+				name = <"context">
+				type = <"EVENT_CONTEXT">
+			>
+			["content"] = (P_BMM_CONTAINER_PROPERTY) <
+				name = <"content">
+				type_def = <
+					container_type = <"List">
+					type = <"CONTENT_ITEM">
+				>
+				cardinality = <|>=0|>
+			>
+		>
+	>
+
+	["EVENT_CONTEXT"] = <
+		name = <"EVENT_CONTEXT">
+		ancestors = <"PATHABLE", ...>
+		properties = <
+			["health_care_facility"] = (P_BMM_SINGLE_PROPERTY) <
+				name = <"health_care_facility">
+				type = <"PARTY_IDENTIFIED">
+			>
+			["start_time"] = (P_BMM_SINGLE_PROPERTY) <
+				name = <"start_time">
+				type = <"DV_DATE_TIME">
+				is_mandatory = <True>
+			>
+			["end_time"] = (P_BMM_SINGLE_PROPERTY) <
+				name = <"end_time">
+				type = <"DV_DATE_TIME">
+			>
+			["participations"] = (P_BMM_CONTAINER_PROPERTY) <
+				name = <"participations">
+				type_def = <
+					container_type = <"List">
+					type = <"PARTICIPATION">
+				>
+				cardinality = <|>=0|>
+			>
+			["location"] = (P_BMM_SINGLE_PROPERTY) <
+				name = <"location">
+				type = <"String">
+			>
+			["setting"] = (P_BMM_SINGLE_PROPERTY) <
+				name = <"setting">
+				type = <"DV_CODED_TEXT">
+				is_mandatory = <True>
+			>
+			["other_context"] = (P_BMM_SINGLE_PROPERTY) <
+				name = <"other_context">
+				type = <"CLUSTER">
+				is_mandatory = <True>
+			>
+		>
+	>
+
+	--
+	--------------------- rm.composition.content ------------------
+	--
+
+	["CONTENT_ITEM"] = <
+		name = <"CONTENT_ITEM">
+		ancestors = <"LOCATABLE", ...>
+		is_abstract = <True>
+	>
+
+	--
+	--------------- rm.composition.content.navigation -------------
+	--
+
+	["SECTION"] = <
+		name = <"SECTION">
+		ancestors = <"CONTENT_ITEM", ...>
+		properties = <
+			["items"] = (P_BMM_CONTAINER_PROPERTY) <
+				name = <"items">
+				type_def = <
+					container_type = <"List">
+					type = <"CONTENT_ITEM">
+				>
+				cardinality = <|>=0|>
+			>
+		>
+	>
+
+	--
+	--------------- rm.composition.content.entry -------------
+	--
+
+	["ENTRY"] = <
+		name = <"ENTRY">
+		ancestors = <"CONTENT_ITEM", ...>
+		properties = <
+			["subject"] = (P_BMM_SINGLE_PROPERTY) <
+				name = <"subject">
+				type = <"PARTY_PROXY">
+				is_mandatory = <True>
+			>
+			["provider"] = (P_BMM_SINGLE_PROPERTY) <
+				name = <"provider">
+				type = <"PARTY_PROXY">
+			>
+			["other_participations"] = (P_BMM_CONTAINER_PROPERTY) <
+				name = <"other_participations">
+				type_def = <
+					container_type = <"List">
+					type = <"PARTICIPATION">
+				>
+				cardinality = <|>=0|>
+			>
+			["data"] = (P_BMM_CONTAINER_PROPERTY) <
+				name = <"data">
+				type_def = <
+					container_type = <"List">
+					type = <"ITEM">
+				>
+				cardinality = <|>=0|>
+			>
+		>
+	>
+
+>
+
+--|
+--| ***** BEGIN LICENSE BLOCK *****
+--| Version: MPL 1.1/GPL 2.0/LGPL 2.1
+--|
+--| The contents of this file are subject to the Mozilla Public License Version
+--| 1.1 (the 'License'); you may not use this file except in compliance with
+--| the License. You may obtain a copy of the License at
+--| http://www.mozilla.org/MPL/
+--|
+--| Software distributed under the License is distributed on an 'AS IS' basis,
+--| WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+--| for the specific language governing rights and limitations under the
+--| License.
+--|
+--| The Original Code is openehr_ehr_102.dadl
+--|
+--| The Initial Developer of the Original Code is Thomas Beale.
+--| Portions created by the Initial Developer are Copyright (C) 2010
+--| the Initial Developer. All Rights Reserved.
+--|
+--| Contributor(s):
+--|
+--| Alternatively, the contents of this file may be used under the terms of
+--| either the GNU General Public License Version 2 or later (the 'GPL'), or
+--| the GNU Lesser General Public License Version 2.1 or later (the 'LGPL'),
+--| in which case the provisions of the GPL or the LGPL are applicable instead
+--| of those above. If you wish to allow use of your version of this file only
+--| under the terms of either the GPL or the LGPL, and not to allow others to
+--| use your version of this file under the terms of the MPL, indicate your
+--| decision by deleting the provisions above and replace them with the notice
+--| and other provisions required by the GPL or the LGPL. If you do not delete
+--| the provisions above, a recipient may use your version of this file under
+--| the terms of any one of the MPL, the GPL or the LGPL.
+--|
+--| ***** END LICENSE BLOCK *****
+--|
+

@@ -1,0 +1,171 @@
+﻿TODO
+====
+- Move generic stuff into a generic EA Class Library, including: EAUMLModel
+- Include <datatype>???
+- Enumeration not possible in BMM yet, ignore for now
+- How to specify default read-only values?
+- Implement generic UML -> ADL based on specific DCM -> CIMI ADL
+- Use this as the basis for the AML EA Extension
+- Include authors
+- Create BMM Importer!
+- Change to EA SQL XML interface for speed
+- Move toBMMString to EA_BMM_Model instead of BMM_ModelVisitor
+- "Export BMM" only enable if stereotype <reference_model> on selected package
+- Add documentation to BMM (see at end of this file)
+- Rename to BMM_EA_Extension!
+
+BMM v2.0
+BMM v2.1 (2014-jun) <- added Enumerations! TODO!
+
+CHANGELOG
+=========
+[2014-sep-17]
+BMM_Package
+- added is_primitive_types_package
+BMM_ModelVisitor
+- removed hard-coded inclusion of openehr primitive_types
+
+[2014-jul-22]
+EA_BMM_Model,BMM_ModelVisitor:
+- Added is_computed for BMM_Property
+- BMM_PropertyFromAttribute is_mandatory/cardinality fixed -> LowerBound..UpperBound
+
+[2014-jun-04]
+BMM_ModelVisitor:
+- Made it more general. Moved hardcoded variables to model properties.
+
+	BMM						   EA Package
+	---						   ----------
+	schema_lifecycle_state	-> status e.g. "experimental"
+	schema_description		-> name + Package.version
+	schema_name				-> alias
+	rm_release				-> version
+	rm_publisher			-> author
+
+[2013-jun-17]
+BMM_ModelVisitor:
+- [https://github.com/opencimi/rm/issues/2] is_abstract was a string but should be a boolean without the quotes. David Moner reported this.
+- [https://github.com/opencimi/rm/issues/3] SINGLE PROPERTY with cardinality > 1 should be CONTAINER PROPERTY
+
+[2013-apr-27]
+CTS2
+	Moved to own project
+
+[2013-apr-05]
+BMM_ModelVisitor:
+	Fixed generic type def
+
+[2013-apr-04]
+BMM_ModelVisitor:
+	Fixed generic type def (assume <T>)
+	Ignore <enumeration> classes for now
+
+[2013-apr-03]
+BMM_ModelVisitor:
+	Save BMM to file
+	P_BMM_GENERIC_PROPERTY_OPEN is actually P_BMM_SINGLE_PROPERTY_OPEN, renamed
+
+[2013-feb-26]
+BMM_ModelVisitor:
+	archetype_parent_class name was hard-coded, not use name of class
+
+[2012-dec-02]
+BMM_ModelVisitor/EA_BMM_Model: 
+	dynamically find <<archetype_rm_closure>> package name
+	dynamically find <<archetype_parent_class> in rm closure package
+	rm_release is set using package.Version
+	some work on the generic types (NOT FINISHED)
+	cardinality "0..1" was mapped to ">0", this is wrong, it is now mapped to no cardinality
+
+[2012-sep-14]
+EA_BMM_Model; Replace spaces in names with '_'.
+Include correct primitives.
+Some other tweaks. To work with ADL Workbench-beta8 and CIMI RM 1.0.5a.
+
+[2012-aug-23]
+Review and compilation of bmm by Thomas Beale.
+Fixed minor errors in generation.
+Added is_mandatory.
+Also include DataTypes; they were missing from the Assumed Types.
+
+[2012-aug-21]
+Initial version
+Had to add stereotypes tor the RM attributes for "is_im_runtime" (see e.g. PARTY_IDENTIFIED in cimi_structures) and "is_im_infrastructure" for e.g. archetype_node_id  
+
+----------------------------------
+Questions and Answers (from Thomas Beale):
+- Q: UML Model is not entirely accurate? In the BMM the base class is "Any" and that is not modelled in UML.
+  A: Just leave out the ancestors. Or add "Any", ...
+- Q: Why is the name property and de <[name]> always the same?
+  A: it's just a property of the syntax, which is very general purpose. The 'key' could be anything, it just makes sense to make it the class or property name in this model. This structure operates as a Hash, so it enables the software to used the materialised objects as a giant Hash of ClassDefinition objects, each keyed by the class name; same for the properties. They keys could be anything, but then it makes it inconvenient. In other uses of the syntax, the keys are different.
+- Q: Is the default for is_abstract always false?
+  A: yep
+- Q: Is the default cardinality always 1? 
+  A: for multiply-valued attributes (i.e. P_BMM_CONTAINER_PROPERTY properties), it is 0..*
+- Q: Is a cardinality of 1 or 0..1 always "converted" to a P_BMM_SINGLE_PROPERTY?
+  A: yep
+- Q: Not sure how to distinguish between cardinalities "0..1" and "1..1" in the BMM. There are some of those in the UML, but I don't know how to represent that in BMM.
+  A: just use the is_mandatory flag. The mappings should be:
+	0..1 => P_BMM_SINGLE_PROPERTY + (nothing, means not is_mandatory)
+	1..1 => P_BMM_SINGLE_PROPERTY + is_mandatory
+	0..* => P_BMM_CONTAINER_PROPERTY + cardinality = <|>=0|> or you can leave it blank, since assumed cardinality is >=0
+	1..* => P_BMM_CONTAINER_PROPERTY + cardinality = <|>=1|
+TODO:	n..m => P_BMM_CONTAINER_PROPERTY + cardinality = <|n..m|
+ - Q: What does BMM stand for?
+   A: BMM = Basic Meta-Model
+- Q: Should we define the "Assumed Types" in the "primitive_types" section of the BMM?
+  A: It contained Identifiers and primitive_types. The later should be removed.
+- Q: What is the meaning of the "..." in ancestors?
+  A: This denotes that this is an array
+
+----------------------------------
+File extension .adls for ADL 1.5 archetypes.
+
+* 'generated' marker
+Used to indicate that the artefact was generated by software, rather than authored by hand. This flag will appear on any differential
+(.adls file extension) archetype converted from a legacy (pre-1.5) archetype (.adl extension). In addition, any generated flat form 
+archetype (.adlf file) carries this marker. The flag primarily allows tools to detect that a source form archetype (i.e. any .adls file
+or its XML equivalent) was generated from a legacy file rather than an authored artefact.
+Most archetypes in the CKM repository when viewed in their Differential Source form (Differential and Source tabs) include the 'generated'
+marked in the top line. By contrast, none of the archetypes in the ADL_1.5_test or openEHR_example repositories contain differential 
+archetypes with the 'generated' marker.
+
+http://www.openehr.org/svn/ref_impl_eiffel/TRUNK/apps/adl_workbench/doc/web/learning_adl_15.html
+
+annotations
+  items = <
+    ["en"] = <
+      items = <
+        ["/data[at0001]/items[at0.8]"] = <
+          items = <
+            ["design note"] = <"this is a design note on allergic reaction">
+            ["requirements note"] = <"this is a requirements note on allergic reaction">
+            ["medline ref"] = <"this is a medline ref on allergic reaction">
+          >
+        >
+        ["/data[at0001]/items[at0.10]"] = <
+          items = <
+            ["design note"] = <"this is a design note on intelerance">
+            ["requirements note"] = <"this is a requirements note on intolerance">
+            ["national data dictionary"] = <"NDD ref for intoleranance">
+          >
+        >
+      >
+    >
+  >
+
+[2014-jun-04]
+Q: There is documentation with classes & attributes, can I add that to the BMM? E.g. like this:
+    ["Subject"] = <
+        name = <"Subject">
+*		documentation = <"An entity of interest, either biological or otherwise.">
+        properties = <
+            ["performingProduct"] = (P_BMM_SINGLE_PROPERTY) <
+                name = <"performingProduct">
+*				documentation = <"Each Subject might be a function performed by one Product.  Each Product might function as one or more Subject.">
+                type = <"Product">
+            >
+			...
+        >
+    >
+Q: BRIDG has <DEPRECATION> as a stereotype to attributes. How do I specify that in BMM?
