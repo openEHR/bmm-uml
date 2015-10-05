@@ -9,5 +9,6 @@ This is as-is software for now and needs documentation.
 
 Future plans include aligning with OMG AML Specification <http://www.omg.org/spec/AML>, specifically the AML Reference Model Profile.
 
-BMM_EA_Extension/ contains the Visual Studio C# Project
+Contents
+	BMM_EA_Extension/ contains the Visual Studio C# Project
 
