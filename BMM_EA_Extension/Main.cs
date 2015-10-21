@@ -7,6 +7,7 @@ using System.Net;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.XPath;
+using R4C_BMM_EA_Extension.EA_BMM_Model;
 
 namespace R4C_BMM_EA_Extension
 {
@@ -88,10 +89,10 @@ namespace R4C_BMM_EA_Extension
                 {
                     case "Export":
                         Repository.EnableCache = true;
-                        new BMM_ModelVisitor().run(EA_BMM_Model.EA_BMM_ModelFactory.getPackage(Repository, selectedPackage));
+                        new BMM_ModelVisitor().run(EA_BMM_ModelFactory.getPackage(Repository, selectedPackage));
                         break;
                     case "Import":
-                        MessageBox.Show("NYI");
+                        MessageBox.Show("NYI", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         break;
                     case "About...":
                         // AboutForm anAbout = new AboutForm();
@@ -101,8 +102,9 @@ namespace R4C_BMM_EA_Extension
             }
             catch (Exception e)
             {
-                MessageBox.Show(e.ToString());
+                MessageBox.Show(e.ToString(), "Exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            Cursor.Current = Cursors.Default;
         }
     }
 }

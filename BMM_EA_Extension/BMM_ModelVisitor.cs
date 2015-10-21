@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.IO;
 using System.Windows.Forms;
 using R4C_BMM_EA_Extension.EA_BMM_Model;
-using System.IO;
 
 namespace R4C_BMM_EA_Extension
 {
@@ -23,6 +23,7 @@ namespace R4C_BMM_EA_Extension
             {
                 return;
             }
+            Cursor.Current = Cursors.WaitCursor;
 
             /*
             ------------------------------------------------------
@@ -98,8 +99,7 @@ namespace R4C_BMM_EA_Extension
             {
                 stream.Write(bmm.ToString());
             }
-
-            MessageBox.Show("BMM Ready.");
+            MessageBox.Show("BMM Generated.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         public void visit(BMM_Package package)
@@ -190,6 +190,10 @@ namespace R4C_BMM_EA_Extension
             if (bmm_class.is_abstract)
             {
                 appendLine("is_abstract", bmm_class.is_abstract);
+            }
+            if (bmm_class.has_documentation)
+            {
+                appendLine("documentation", bmm_class.documentation);
             }
             if (bmm_class.has_properties)
             {

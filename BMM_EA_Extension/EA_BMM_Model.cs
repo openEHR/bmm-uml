@@ -41,6 +41,16 @@ namespace R4C_BMM_EA_Extension
                 }
             }
 
+            public bool has_documentation
+            {
+                get { return !string.IsNullOrEmpty(eaElement.Notes.Trim()); }
+            }
+
+            public string documentation
+            {
+                get { return eaElement.Notes.Trim(); }
+            }
+
             public bool is_archetype_parent
             {
                 get

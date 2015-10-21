@@ -19,6 +19,14 @@ BMM v2.1 (2014-jun) <- added Enumerations! TODO!
 
 CHANGELOG
 =========
+[2015-oct-21]
+BMM_Base
+- added documentation
+BMM_ModelVisitor
+- added documentation for class
+
+--- [2015-oct-05] Sourcecode now at GitHub! https://github.com/openEHR/bmm-uml
+
 [2014-sep-17]
 BMM_Package
 - added is_primitive_types_package
